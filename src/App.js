@@ -1,28 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react';
 import GoogleMap from './components/GoogleMap'
+import Login from './containers/LoginContainer'
 
-function App() {
-  return (
-    <div className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
-      <GoogleMap></GoogleMap>
-    </div>
-  );
+class App extends Component {
+  componentDidMount() {
+    fetch('https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Health_WebMercator/MapServer/7/query?where=1%3D1&outFields=*&outSR=4326&f=json')
+    .then(resp => resp.json())
+    .then(listOfCenters => this.fetchAPIData(listOfCenters.features))
+  }
+
+  addClinic = obj => {
+    fetch('http://localhost:3000/clinics', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(obj)
+      })
+  }
+
+  fetchAPIData = array => {
+    array.forEach(center => {
+      let clinic = center.attributes
+      let isAccepting;
+      clinic["DCGIS.PRIMARY_CARE_INFO.ACCEPT_NEW_PT"] === "Yes" ? isAccepting = true : isAccepting = false;
+
+      let clinics = {
+        name: clinic["PrimaryCarePt.NAME"],
+        address: clinic["PrimaryCarePt.ADDRESS"],
+        city: clinic["PrimaryCarePt.CITY"],
+        state: clinic["PrimaryCarePt.STATE"],
+        zip: clinic["PrimaryCarePt.ZIP"],
+        address_id: clinic["PrimaryCarePt.ADDRID"],
+        phone_number: clinic["PrimaryCarePt.PHONE"],
+        website_url: clinic["PrimaryCarePt.WEB_URL"],
+        latitude: clinic["PrimaryCarePt.XCOORD"],
+        longitude: clinic["PrimaryCarePt.YCOORD"],
+        new_patients: isAccepting
+      }
+
+      this.addClinic(clinics)
+    })
+  }
+
+  render(){
+    return (
+      <div className="App">
+        <Login></Login>
+        <GoogleMap></GoogleMap>
+      </div>
+    );
+  }
 }
 
 export default App;
