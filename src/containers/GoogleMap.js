@@ -17,7 +17,7 @@ export default class GoogleMap extends Component {
     }
 
     renderClinics = (array) => {
-        if (array.length != 0) {
+        if (array.length !== 0) {
             return array.forEach(place => {
                 return <ClinicPointer
                         lat={place.latitude}

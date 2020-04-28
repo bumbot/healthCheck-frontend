@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import SearchBar from './containers/SearchContainer'
 import ClinicContainer from './containers/ClinicContainer'
 import Login from './containers/LoginContainer'
+import NavBar from './components/NavBar'
+import {Route, Switch} from 'react-router-dom'
 
 class App extends Component {
 
@@ -63,21 +64,29 @@ class App extends Component {
     })
   }
 
+  filterClinics = () => {
+    return this.state.listOfClinics.map(clinic =>
+      clinic.name.toLowerCase().includes(this.state.searchTerm.toLowerCase()))
+  }
+
   render(){
     return (
       <div className="App">
-        <Login/>
-        <SearchBar searchTerm={this.state.searchTerm}
-          updateSearch={this.updateSearch}
-          handleSubmit={this.handleSubmit}/>
-        <ClinicContainer listOfClinics={this.state.listOfClinics.map(clinic => {
-          debugger
-          if (clinic.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())) {
-            return clinic
-          }
-    })}/>
+        <NavBar user={this.state.user}/>
+
+        <Switch>
+          <Route exact path="/home" render={() =>
+            <ClinicContainer
+              listOfClinics={this.filterClinics}
+              searchTerm={this.state.searchTerm}
+              updateSearch={this.updateSearch}
+              handleSubmit={this.handleSubmit}
+            />
+            }/>
+          <Route exact path="/" component={Login}/>
+        </Switch>
       </div>
-    );
+    )
   }
 }
 
