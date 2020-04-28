@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import GoogleMapComponent from 'google-map-react';
-import FakeComponent from './FakeComponent'
+import ClinicPointer from '../components/ClinicPointer'
 
 const apiKey= 'AIzaSyBp4sd7Eh41b6SsZhJTSst_twS7zhYgtsI'
 
@@ -12,7 +12,22 @@ export default class GoogleMap extends Component {
                 lat: 38.898074, 
                 lng: -77.032864
             },
-            zoom: 15
+            zoom: 12
+        }
+    }
+
+    renderClinics = (array) => {
+        if (array.length != 0) {
+            return array.forEach(place => {
+                return <ClinicPointer
+                        lat={place.latitude}
+                        lng={place.longitude}
+                        key={place.address_id}
+                        name={place.name}/>
+                }
+            )
+        } else {
+            return null
         }
     }
 
@@ -27,11 +42,13 @@ export default class GoogleMap extends Component {
                     defaultCenter={this.state.center}
                     defaultZoom={this.state.zoom}
                 >
-                    <FakeComponent
+                    <ClinicPointer
                         lat={38.898074} 
                         lng={-77.032864}
-                        text="Flatiron DC"
+                        key={1}
+                        name="Flatiron DC"
                     />
+                    {this.renderClinics(this.props.listOfClinics)}
                 </GoogleMapComponent>
             </div>
         )

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export default class FakeComponent extends Component {
+export default class ClinicPointer extends Component {
     render(){
         return (
             <div>
@@ -15,7 +15,7 @@ export default class FakeComponent extends Component {
                     borderRadius: '100%',
                     transform: 'translate(-50%, -50%)'
                 }}>
-                    {this.props.text}
+                    {this.props.name}
                 </div>
             </div>
         )
