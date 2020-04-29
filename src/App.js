@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import ClinicContainer from './containers/ClinicContainer'
 import Login from './containers/LoginContainer'
 import NavBar from './components/NavBar'
-import {Route, Switch} from 'react-router-dom'
+import Appointment from './containers/Appointment'
+import {Route, Switch, Redirect} from 'react-router-dom'
 
 class App extends Component {
 
@@ -11,6 +12,8 @@ class App extends Component {
     this.state = {
       searchTerm: "",
       user: null,
+      appointments: null,
+      userClinics: null,
       listOfClinics: []
     }
   }
@@ -65,25 +68,111 @@ class App extends Component {
   }
 
   filterClinics = () => {
-    return this.state.listOfClinics.map(clinic =>
-      clinic.name.toLowerCase().includes(this.state.searchTerm.toLowerCase()))
+    return this.state.listOfClinics.map(clinic => {
+      return clinic.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())
+    })
+  }
+
+  renderClinicCont = () => {
+    if (this.state.user) {
+      return (
+        <div>
+          <ClinicContainer
+            listOfClinics={this.filterClinics}
+            searchTerm={this.state.searchTerm}
+            updateSearch={this.updateSearch}
+            handleSubmit={this.handleSubmit}
+          />
+        </div>
+      )}
+  }
+
+  renderAppointment = () => {
+    if (this.state.user) {
+      return (
+        <div>
+          <Appointment
+            appointments={this.state.appointments}
+            clinics={this.state.userClinics}
+          />
+        </div>
+      )
+    }
+  }
+
+  renderLogin = () => {
+    if (!this.state.user || this.state.user === null) {
+      return (
+        <div className="login" >
+          <Login userLogin={this.userLogin}/>
+        </div>
+      )
+    } else {
+      return(
+        <Redirect to="/search"/>
+      )
+    }
+  }
+
+  userLogin = (event) => {
+    event.preventDefault()
+    let name = event.target.children[0].children[1].value
+    let pw = event.target.children[1].children[1].value
+    let payload = {
+      username: name,
+      password: pw
+    }
+
+    fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(resp => resp.json())
+    .then(obj => {
+      if (obj.error === true) {
+        console.log("error")
+        alert(obj.message)
+      } else {
+        console.log("success");
+        this.setState({
+          user: obj.user_data,
+          appointments: obj.user_appts,
+          userClinics: obj.user_clinics
+        })
+      }
+    })
+
+    event.target.reset()
+  }
+
+  userLogout = (event) => {
+    this.setState({
+      user: null,
+      appointments: null
+    })
+    
   }
 
   render(){
     return (
       <div className="App">
-        <NavBar user={this.state.user}/>
-
+        <NavBar
+              user={this.state.user}
+              logout={this.userLogout}/>
         <Switch>
-          <Route exact path="/home" render={() =>
-            <ClinicContainer
-              listOfClinics={this.filterClinics}
-              searchTerm={this.state.searchTerm}
-              updateSearch={this.updateSearch}
-              handleSubmit={this.handleSubmit}
-            />
-            }/>
-          <Route exact path="/" component={Login}/>
+          <Route exact path={["/", "/login"]} render={() =>
+            this.renderLogin()
+          }/>
+          <Route exact path="/search" render={() =>
+            this.renderClinicCont()
+          }/>
+          <Route exact path="/appointments" render={() =>
+            this.renderAppointment()
+          }/>
         </Switch>
       </div>
     )
