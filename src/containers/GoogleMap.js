@@ -9,7 +9,7 @@ export default class GoogleMap extends Component {
         super()
         this.state = {
             center: {
-                lat: 38.898074, 
+                lat: 38.898074,
                 lng: -77.032864
             },
             zoom: 12
@@ -17,18 +17,22 @@ export default class GoogleMap extends Component {
     }
 
     renderClinics = (array) => {
+        let newArr=[]
         if (array.length !== 0) {
-            return array.forEach(place => {
-                return <ClinicPointer
-                        lat={place.latitude}
+            array.forEach(place => {
+                newArr.push(<ClinicPointer
+                        lat={place.latitude} 
                         lng={place.longitude}
                         key={place.address_id}
-                        name={place.name}/>
-                }
+                        name={place.name}
+                        renderClinicInfo={this.props.renderClinicInfo}
+                        clinicInfo={place}
+                        />
+                )
+            }
             )
-        } else {
-            return null
         }
+        return newArr
     }
 
 
@@ -36,18 +40,12 @@ export default class GoogleMap extends Component {
         return (
             <div style={{ height: '600px', width: '50%' }}>
                 <GoogleMapComponent
-                    // bootstrapURLKeys={{
-                    //     key: apiKey
-                    // }}
+                    bootstrapURLKeys={{
+                        key: apiKey
+                    }}
                     defaultCenter={this.state.center}
                     defaultZoom={this.state.zoom}
                 >
-                    <ClinicPointer
-                        lat={38.898074} 
-                        lng={-77.032864}
-                        key={1}
-                        name="Flatiron DC"
-                    />
                     {this.renderClinics(this.props.listOfClinics)}
                 </GoogleMapComponent>
             </div>

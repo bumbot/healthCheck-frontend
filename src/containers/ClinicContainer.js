@@ -11,7 +11,9 @@ export default class ClinicContainer extends Component {
                     updateSearch={this.props.updateSearch}
                     handleSubmit={this.props.handleSubmit}
                 />
-                <GoogleMap listOfClinics={this.props.listOfClinics}/>
+                <GoogleMap
+                    listOfClinics={this.props.listOfClinics}  
+                />
             </div>
         )
     }

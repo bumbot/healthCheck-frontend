@@ -3,7 +3,10 @@ import ClinicContainer from './containers/ClinicContainer'
 import Login from './containers/LoginContainer'
 import NavBar from './components/NavBar'
 import Appointment from './containers/Appointment'
+import ClinicInfo from './components/ClinicInfo'
 import {Route, Switch, Redirect} from 'react-router-dom'
+
+const geocodeKey = 'AIzaSyCLwKgWRXE9whJkaT2pV7PgMc5lnFdiXXE'
 
 class App extends Component {
 
@@ -14,7 +17,8 @@ class App extends Component {
       user: null,
       appointments: null,
       userClinics: null,
-      listOfClinics: []
+      listOfClinics: [],
+      currentClinic: null
     }
   }
 
@@ -30,7 +34,7 @@ class App extends Component {
     .then(listOfCenters => this.fetchAPIData(listOfCenters.features))
   }
 
-  addClinic = obj => {
+  addClinic = async (obj) => {
     fetch('http://localhost:3000/clinics', {
         method: 'POST',
         headers: {
@@ -41,12 +45,13 @@ class App extends Component {
       })
   }
 
-  fetchAPIData = array => {
+  fetchAPIData = async (array) => {
     array.forEach(healthCenter => {
       let clinic = healthCenter.attributes
+      let coordinates = healthCenter.geometry
       let isAccepting;
       clinic["DCGIS.PRIMARY_CARE_INFO.ACCEPT_NEW_PT"] === "Yes" ? isAccepting = true : isAccepting = false;
-      
+
       let clinics = {
         name: clinic["PrimaryCarePt.NAME"],
         address: clinic["PrimaryCarePt.ADDRESS"],
@@ -56,10 +61,11 @@ class App extends Component {
         address_id: clinic["PrimaryCarePt.ADDRID"],
         phone_number: clinic["PrimaryCarePt.PHONE"],
         website_url: clinic["PrimaryCarePt.WEB_URL"],
-        latitude: clinic["PrimaryCarePt.XCOORD"],
-        longitude: clinic["PrimaryCarePt.YCOORD"],
+        latitude: coordinates.y,
+        longitude: coordinates.x,
         new_patients: isAccepting
       }
+      
       this.setState({
         listOfClinics: [...this.state.listOfClinics, clinics]
       })
@@ -69,7 +75,9 @@ class App extends Component {
 
   filterClinics = () => {
     return this.state.listOfClinics.map(clinic => {
-      return clinic.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())
+      if (clinic.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())) {
+        return clinic
+      }
     })
   }
 
@@ -78,10 +86,11 @@ class App extends Component {
       return (
         <div>
           <ClinicContainer
-            listOfClinics={this.filterClinics}
+            listOfClinics={this.filterClinics()}
             searchTerm={this.state.searchTerm}
             updateSearch={this.updateSearch}
             handleSubmit={this.handleSubmit}
+            currentClinic={this.state.currentClinic}
           />
         </div>
       )}
@@ -112,6 +121,15 @@ class App extends Component {
         <Redirect to="/search"/>
       )
     }
+  }
+
+  renderClinicInfo = (clinic) => {
+    this.setState({
+        currentClinic: clinic
+    })
+    return(
+        <ClinicInfo name={this.props.currentClinic.name}/>
+    )
   }
 
   userLogin = (event) => {
@@ -161,8 +179,8 @@ class App extends Component {
     return (
       <div className="App">
         <NavBar
-              user={this.state.user}
-              logout={this.userLogout}/>
+            user={this.state.user}
+            logout={this.userLogout}/>
         <Switch>
           <Route exact path={["/", "/login"]} render={() =>
             this.renderLogin()
@@ -173,6 +191,9 @@ class App extends Component {
           <Route exact path="/appointments" render={() =>
             this.renderAppointment()
           }/>
+          <Route exact path="clinics/:id" render={(props) => {
+            this.renderClinicInfo()
+          }}/>
         </Switch>
       </div>
     )

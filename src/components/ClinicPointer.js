@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 export default class ClinicPointer extends Component {
     render(){
         return (
-            <div>
+            <div onClick={()=> {this.props.renderClinicInfo(this.props.clinicInfo)}}>
                 <div style={{
                     color: 'white', 
                     background: 'grey',
