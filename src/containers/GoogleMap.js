@@ -14,7 +14,8 @@ export class MapContainer extends Component {
             },
             zoom: 12,
             activeMarker: null,
-            showingInfoWindow: false
+            showingInfoWindow: false,
+            redirectTo: null
         }
     }
 
@@ -59,13 +60,11 @@ export class MapContainer extends Component {
     }
 
     onMarkerClick = (props, marker) => {
-        debugger
         this.setState({
             activeMarker: marker,
-            showingInfoWindow: true
-        })
-        this.props.onClinicSelect(props)
-    
+            showingInfoWindow: true,
+            redirectTo: `/clinics/${props.id}`
+        })    
     }
     
     onMapClick =() => {
@@ -78,22 +77,26 @@ export class MapContainer extends Component {
     }
 
     render() {
-        return (
-            <Map 
-                google={this.props.google}
-                style={{
-                    position: 'relative',  
-                    width: '80%',
-                    height: '600px'}}
-                initialCenter={
-                    this.state.center
-                }
-                zoom={this.state.zoom}
-                onClick={this.onMapClick}
-            >
-                {this.renderClinics()}
-            </Map>
-        )
+        if (this.state.redirectTo !== null ) {
+            return <Redirect to={this.state.redirectTo}/>
+        } else {
+            return (
+                <Map 
+                    google={this.props.google}
+                    style={{
+                        position: 'relative',  
+                        width: '80%',
+                        height: '600px'}}
+                    initialCenter={
+                        this.state.center
+                    }
+                    zoom={this.state.zoom}
+                    onClick={this.onMapClick}
+                >
+                    {this.renderClinics()}
+                </Map>
+            )
+        }
     }
 
 }

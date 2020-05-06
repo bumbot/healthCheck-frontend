@@ -1,14 +1,35 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button'
 import {Redirect} from 'react-router-dom'
 
-const ClinicInfo = ({clinic}) => {
-    return clinic ?
-        <div>
-            {clinic.name}
-            <Button variant='secondary' onClick={<Redirect to="/appointments/new"/>}>Create Appointment</Button>
-        </div>
-    : null
-}
+export default class ClinicInfo extends Component {
+    constructor() {
+        super();
+        this.state={
+            newAppt: false,
+            id: null
+        }
+    }
 
-export default ClinicInfo
+    onBtnClick = () => {
+        this.setState({
+            newAppt: true,
+            id: this.props.id
+        })
+    }
+
+    render() {
+        if (this.state.newAppt) {
+            return <Redirect to={`/appointment/new/${this.state.id}`}/>
+        } else {
+            return (
+                <div>
+                    <h1>
+                        {this.props.name}
+                    </h1>
+                    {this.props.user ? <Button variant='secondary' onClick={this.onBtnClick}>Create Appointment</Button> : null}
+                </div>
+            )
+        }
+    }
+}

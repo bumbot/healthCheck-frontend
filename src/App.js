@@ -17,8 +17,7 @@ class App extends Component {
       user: null,
       appointments: null,
       userClinics: null,
-      listOfClinics: [],
-      currentClinic: null
+      listOfClinics: []
     }
   }
 
@@ -88,7 +87,6 @@ class App extends Component {
   }
 
   renderClinicCont = () => {
-    // if (this.state.user) {
       return (
         <div>
           <ClinicContainer
@@ -96,11 +94,10 @@ class App extends Component {
             searchTerm={this.state.searchTerm}
             updateSearch={this.updateSearch}
             handleSubmit={this.handleSubmit}
-            onClinicSelect={this.onClinicSelect}
+            currentClinic={this.state.currentClinic}
           />
         </div>
       )
-    // }
   }
 
   renderAppointment = () => {
@@ -217,14 +214,6 @@ class App extends Component {
     
   }
 
-  onClinicSelect = (props) => {
-    let clinicId = props.id
-    let selectedClinic = this.state.listOfClinics.find(clinic => clinic.id === clinicId)
-    this.setState({
-      currentClinic: selectedClinic
-    })
-}
-
   render(){
     return (
       <div className="App">
@@ -234,10 +223,16 @@ class App extends Component {
         />
         <Switch>
           <Route key="new" exact path ="/new" render={() => {
-            return <Login userLogin={this.newUserCreate} title="Create a New User"/>
+            if (this.state.user) {
+              return <Redirect to='/search'/>
+            } else {
+              return <Login userLogin={this.newUserCreate} title="Create a New User"/>
+            }
           }}/>
-          <Route exact path="/appointments/new" render={() => {
-            return <ApptForm clinic={this.state.currentClinic}/>
+          <Route exact path="/appointment/new/:id" render={(props) => {
+            let id = parseInt(props.match.params.id)
+            let clinic = this.state.listOfClinics.find(clinic => clinic.id === id)
+            return <ApptForm clinic={clinic}/>
           }}/>
           <Route exact path="/search" render={() =>
             this.renderClinicCont()
@@ -246,9 +241,10 @@ class App extends Component {
             this.renderAppointment()
           }/>
           <Route exact path="/clinics/:id" render={(props) => {
-            let id = props.match.params.id
+            let id = parseInt(props.match.params.id)
             let clinic = this.state.listOfClinics.find(clinic => clinic.id === id)
-            return <ClinicInfo clinic={clinic}/>
+            let name = clinic.name
+            return <ClinicInfo name={name} id={id} user={this.state.user}/>
           }}/>
           <Route key="login" exact path="/login" render={() =>
             this.renderLogin()

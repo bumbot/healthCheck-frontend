@@ -13,7 +13,7 @@ export default class ClinicContainer extends Component {
                 />
                 <GoogleMap
                     listOfClinics={this.props.listOfClinics}
-                    onClinicSelect={this.props.onClinicSelect}  
+                    currentClinic={this.props.currentClinic}
                 />
             </div>
         )
