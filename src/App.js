@@ -80,7 +80,7 @@ class App extends Component {
     })
   }
 
-  filterClinics = () => {
+  filterClinicNames = () => {
     return this.state.listOfClinics.filter(clinic =>
       clinic.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())
     )
@@ -90,7 +90,7 @@ class App extends Component {
       return (
         <div>
           <ClinicContainer
-            listOfClinics={this.filterClinics()}
+            listOfClinics={this.filterClinicNames()}
             searchTerm={this.state.searchTerm}
             updateSearch={this.updateSearch}
             handleSubmit={this.handleSubmit}
@@ -107,6 +107,7 @@ class App extends Component {
           <Appointment
             appointments={this.state.appointments}
             clinics={this.state.userClinics}
+            deleteAppt={this.deleteAppt}
           />
         </div>
       )
@@ -213,6 +214,36 @@ class App extends Component {
     })
     
   }
+  
+  deleteAppt = (event) => {
+    let apptId = parseInt(event.target.value)
+    let appt = this.state.appointments.find(appt => appt.id === apptId)
+    fetch(`http://localhost:3000/appointments/${apptId}`, {
+      method: "DELETE",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(appt)
+    }).then(resp=>resp.json())
+    .then(json=>{
+      if (json.error) {
+        alert(json.message)
+      } else {
+        let newUserClinics= this.state.userClinics.filter(clinics=> clinics.id !== json.clinic.id)
+        let newUserAppts = this.state.appointments.filter(appts=> appts.id !== appt.id)
+
+        this.setState({
+          userClinics: newUserClinics,
+          appointments: newUserAppts
+        })
+      }
+    })
+  }
+
+  createAppt = (event) => {
+    debugger
+  }
 
   render(){
     return (
@@ -232,7 +263,9 @@ class App extends Component {
           <Route exact path="/appointment/new/:id" render={(props) => {
             let id = parseInt(props.match.params.id)
             let clinic = this.state.listOfClinics.find(clinic => clinic.id === id)
-            return <ApptForm clinic={clinic}/>
+            return <ApptForm
+              clinic={clinic}
+              createAppt={this.createAppt}/>
           }}/>
           <Route exact path="/search" render={() =>
             this.renderClinicCont()
@@ -243,8 +276,26 @@ class App extends Component {
           <Route exact path="/clinics/:id" render={(props) => {
             let id = parseInt(props.match.params.id)
             let clinic = this.state.listOfClinics.find(clinic => clinic.id === id)
+
             let name = clinic.name
-            return <ClinicInfo name={name} id={id} user={this.state.user}/>
+            let address = clinic.address
+            let city = clinic.city
+            let state = clinic.state
+            let zip = clinic.zip
+            let phoneNumber = clinic.phone_number
+            let website = clinic.website_url
+            let newPatients = clinic.new_patients
+            return <ClinicInfo
+              name={name}
+              address={address}
+              city={city}
+              state={state}
+              zip={zip}
+              phoneNumber={phoneNumber}
+              website={website}
+              newPatients={newPatients}
+              id={id}
+              user={this.state.user}/>
           }}/>
           <Route key="login" exact path="/login" render={() =>
             this.renderLogin()

@@ -8,7 +8,7 @@ export default class ApptForm extends Component {
         return(
             <div>
                 <h1>{this.props.clinic.name}</h1>
-                <Form>
+                <Form onSubmit={this.props.createAppt}>
                     <Form.Group>
                         <Form.Label>Appointment Date</Form.Label>
                         <Form.Control type="date"/>
