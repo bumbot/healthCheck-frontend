@@ -4,6 +4,8 @@ import Login from './containers/LoginContainer'
 import NavBar from './components/NavBar'
 import Appointment from './containers/Appointment'
 import ClinicInfo from './components/ClinicInfo'
+import ApptForm from './components/ApptForm'
+import Welcome from './components/Welcome'
 import {Route, Switch, Redirect} from 'react-router-dom'
 
 class App extends Component {
@@ -118,7 +120,7 @@ class App extends Component {
     if (!this.state.user || this.state.user === null) {
       return (
         <div className="login" >
-          <Login userLogin={this.userLogin}/>
+          <Login userLogin={this.userLogin} title="Login"/>
         </div>
       )
     } else {
@@ -128,9 +130,11 @@ class App extends Component {
     }
   }
 
-  // renderClinicInfo = (props, clinic) => {
+  // renderNewUser = () => {
   //   return (
-  //       <ClinicInfo name={this.props.currentClinic.name}/>
+  //     <div className="signup">
+  //       <Login userLogin={this.newUserCreate} title="Create a New User"/>
+  //     </div>
   //   )
   // }
 
@@ -144,6 +148,41 @@ class App extends Component {
     }
 
     fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(resp => resp.json())
+    .then(obj => {
+      if (obj.error === true) {
+        console.log("error")
+        alert(obj.message)
+      } else {
+        console.log("success");
+        this.setState({
+          user: obj.user_data,
+          appointments: obj.user_appts,
+          userClinics: obj.user_clinics
+        })
+      }
+    })
+
+    event.target.reset()
+  }
+
+  newUserCreate = (event) => {
+    event.preventDefault()
+    let name = event.target.children[0].children[1].value
+    let pw = event.target.children[1].children[1].value
+    let payload = {
+      username: name,
+      password: pw
+    }
+
+    fetch('http://localhost:3000/users', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -184,21 +223,22 @@ class App extends Component {
     this.setState({
       currentClinic: selectedClinic
     })
-    return (
-      <Redirect to={`/clinics/${clinicId}`} />
-    )
 }
 
   render(){
     return (
       <div className="App">
         <NavBar
-            user={this.state.user}
-            logout={this.userLogout}/>
+          user={this.state.user}
+          logout={this.userLogout}
+        />
         <Switch>
-          <Route exact path={["/", "/login"]} render={() =>
-            this.renderLogin()
-          }/>
+          <Route key="new" exact path ="/new" render={() => {
+            return <Login userLogin={this.newUserCreate} title="Create a New User"/>
+          }}/>
+          <Route exact path="/appointments/new" render={() => {
+            return <ApptForm clinic={this.state.currentClinic}/>
+          }}/>
           <Route exact path="/search" render={() =>
             this.renderClinicCont()
           }/>
@@ -208,9 +248,12 @@ class App extends Component {
           <Route exact path="/clinics/:id" render={(props) => {
             let id = props.match.params.id
             let clinic = this.state.listOfClinics.find(clinic => clinic.id === id)
-            console.log("what is clinic?", clinic)
             return <ClinicInfo clinic={clinic}/>
           }}/>
+          <Route key="login" exact path="/login" render={() =>
+            this.renderLogin()
+          }/>
+          <Route exact path='/' component={Welcome}/>
         </Switch>
       </div>
     )

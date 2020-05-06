@@ -6,6 +6,7 @@ export default class LoginContainer extends Component {
     render() {
         return (
             <div className="login-form">
+                <h1>{this.props.title}</h1>
                 <Form onSubmit={this.props.userLogin}>
                     <Form.Group controlId="formGroupUsername">
                         <Form.Label>Username</Form.Label>

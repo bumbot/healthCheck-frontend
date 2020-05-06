@@ -13,7 +13,7 @@ export class MapContainer extends Component {
                 lng: -77.032864
             },
             zoom: 12,
-            activeMarker: {},
+            activeMarker: null,
             showingInfoWindow: false
         }
     }
@@ -24,22 +24,33 @@ export class MapContainer extends Component {
         if (array.length !== 0) {
             return array.map(place => {
                 return (
-                    
-                        <Marker
-                            key={place.address_id}
-                            position={
-                                {lat: place.latitude,
-                                lng: place.longitude}}
-                            name={place.name}
-                            id={place.id}
-                            onClick={this.onMarkerClick}
-                            onMouseover={this.onHover}
-                        />
-                        
-                    
+                    <Marker
+                        key={place.address_id}
+                        position={{
+                            lat: place.latitude,
+                            lng: place.longitude
+                        }}
+                        name={place.name}
+                        id={place.id}
+                        onClick={this.onMarkerClick}
+                        onMouseover={this.onHover}
+                    >
+                        <InfoWindow
+                            key={`info-${place.address_id}`}
+                            marker={this.state.activeMarker}
+                            visible={this.state.showingInfoWindow}
+                            onClick={()=><Redirect to={`/clinics/${place.id}`}/>}
+                        >
+                            <div>
+                                <h1>{place.name}</h1>
+                            </div>
+                        </InfoWindow>
+                    </Marker>
                 )
             }
             )
+        } else {
+            return null
         }
     }
 
@@ -48,16 +59,19 @@ export class MapContainer extends Component {
     }
 
     onMarkerClick = (props, marker) => {
-        this.props.onClinicSelect(props)
+        debugger
         this.setState({
             activeMarker: marker,
             showingInfoWindow: true
         })
+        this.props.onClinicSelect(props)
+    
     }
     
     onMapClick =() => {
         if (this.state.showingInfoWindow) {
             this.setState({
+                activeMarker: null,
                 showingInfoWindow: false
             })
         }
