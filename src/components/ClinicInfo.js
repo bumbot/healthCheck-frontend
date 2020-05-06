@@ -1,13 +1,11 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-export default class ClinicInfo extends Component {
-
-
-    render() {
-        return (
-            <div>
-                this.props.name
-            </div>
-        )
-    }
+const ClinicInfo = (props) => {
+    return (
+        <div>
+            hello
+        </div>
+    )
 }
+
+export default ClinicInfo

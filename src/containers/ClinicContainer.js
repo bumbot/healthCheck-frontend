@@ -12,7 +12,8 @@ export default class ClinicContainer extends Component {
                     handleSubmit={this.props.handleSubmit}
                 />
                 <GoogleMap
-                    listOfClinics={this.props.listOfClinics}  
+                    listOfClinics={this.props.listOfClinics}
+                    onClinicSelect={this.props.onClinicSelect}  
                 />
             </div>
         )

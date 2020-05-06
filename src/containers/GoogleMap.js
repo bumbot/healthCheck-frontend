@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import GoogleMapComponent from 'google-map-react';
-import ClinicPointer from '../components/ClinicPointer'
+import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
 
 const apiKey= 'AIzaSyBp4sd7Eh41b6SsZhJTSst_twS7zhYgtsI'
 
-export default class GoogleMap extends Component {
+export class MapContainer extends Component {
     constructor() {
         super()
         this.state = {
@@ -16,40 +15,60 @@ export default class GoogleMap extends Component {
         }
     }
 
-    renderClinics = (array) => {
-        let newArr=[]
+
+    renderClinics = () => {
+        let array = this.props.listOfClinics
         if (array.length !== 0) {
-            array.forEach(place => {
-                newArr.push(<ClinicPointer
-                        lat={place.latitude} 
-                        lng={place.longitude}
-                        key={place.address_id}
-                        name={place.name}
-                        renderClinicInfo={this.props.renderClinicInfo}
-                        clinicInfo={place}
-                        />
+            return array.map(place => {
+                return (<Marker
+                    key={place.address_id}
+                    position={
+                        {lat: place.latitude,
+                        lng: place.longitude}}
+                    name={place.name}
+                    onClick={this.onMarkerClick}
+                />
                 )
-            }
+                }
             )
         }
-        return newArr
     }
 
+    onMarkerClick = (props, marker) => {
+        this.props.onClinicSelect(props, marker)
+    }
 
     render() {
         return (
-            <div style={{ height: '600px', width: '50%' }}>
-                <GoogleMapComponent
-                    bootstrapURLKeys={{
-                        key: apiKey
-                    }}
-                    defaultCenter={this.state.center}
-                    defaultZoom={this.state.zoom}
-                >
-                    {this.renderClinics(this.props.listOfClinics)}
-                </GoogleMapComponent>
-            </div>
+            // <div style={{ height: '600px', width: '60%' }}>
+            //     <GoogleMapComponent
+            //         // bootstrapURLKeys={{
+            //         //     key: apiKey
+            //         // }}
+            //         defaultCenter={this.state.center}
+            //         defaultZoom={this.state.zoom}
+            //     >
+            //         {this.renderClinics(this.props.listOfClinics)}
+            //     </GoogleMapComponent>
+            // </div>
+            <Map 
+                google={this.props.google}
+                style={{
+                    position: 'relative',  
+                    width: '80%',
+                    height: '600px'}}
+                initialCenter={
+                    this.state.center
+                }
+                zoom={this.state.zoom}
+            >
+                {this.renderClinics()}
+            </Map>
         )
     }
 
 }
+
+export default GoogleApiWrapper({
+    apiKey: apiKey
+  })(MapContainer)

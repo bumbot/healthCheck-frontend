@@ -6,8 +6,6 @@ import Appointment from './containers/Appointment'
 import ClinicInfo from './components/ClinicInfo'
 import {Route, Switch, Redirect} from 'react-router-dom'
 
-const geocodeKey = 'AIzaSyCLwKgWRXE9whJkaT2pV7PgMc5lnFdiXXE'
-
 class App extends Component {
 
   constructor() {
@@ -82,7 +80,7 @@ class App extends Component {
   }
 
   renderClinicCont = () => {
-    if (this.state.user) {
+    // if (this.state.user) {
       return (
         <div>
           <ClinicContainer
@@ -90,10 +88,11 @@ class App extends Component {
             searchTerm={this.state.searchTerm}
             updateSearch={this.updateSearch}
             handleSubmit={this.handleSubmit}
-            currentClinic={this.state.currentClinic}
+            onClinicSelect={this.onClinicSelect}
           />
         </div>
-      )}
+      )
+    // }
   }
 
   renderAppointment = () => {
@@ -123,11 +122,8 @@ class App extends Component {
     }
   }
 
-  renderClinicInfo = (clinic) => {
-    this.setState({
-        currentClinic: clinic
-    })
-    return(
+  renderClinicInfo = (props, clinic) => {
+    return (
         <ClinicInfo name={this.props.currentClinic.name}/>
     )
   }
@@ -175,6 +171,15 @@ class App extends Component {
     
   }
 
+  onClinicSelect = (props, marker) => {
+    debugger
+    // let selectedClinic = this.state.listOfClinics.find(clinic => clinic.address_id === clinicId)
+    
+    // this.setState({
+    //   currentClinic: selectedClinic
+    // })
+  }
+
   render(){
     return (
       <div className="App">
@@ -191,8 +196,12 @@ class App extends Component {
           <Route exact path="/appointments" render={() =>
             this.renderAppointment()
           }/>
-          <Route exact path="clinics/:id" render={(props) => {
-            this.renderClinicInfo()
+          <Route exact path="/clinics/:address_id" render={(props) => {
+            let id = props.match.params.id
+            let clinic = this.state.listOfClinics.find(clinic => clinic.id === id)
+            console.log("what is clinic?", props)
+            // this.renderClinicInfo()
+            return <ClinicInfo name={this.props.currentClinic}/>
           }}/>
         </Switch>
       </div>
