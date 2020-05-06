@@ -1,11 +1,11 @@
 import React from 'react';
 
-const ClinicInfo = (props) => {
-    return (
+const ClinicInfo = ({clinic}) => {
+    return clinic ?
         <div>
-            hello
+            {clinic.name}
         </div>
-    )
+    : null
 }
 
 export default ClinicInfo

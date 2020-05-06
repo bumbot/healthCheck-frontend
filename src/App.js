@@ -32,7 +32,7 @@ class App extends Component {
     .then(listOfCenters => this.fetchAPIData(listOfCenters.features))
   }
 
-  addClinic = async (obj) => {
+  addClinic = (obj) => {
     fetch('http://localhost:3000/clinics', {
         method: 'POST',
         headers: {
@@ -43,7 +43,7 @@ class App extends Component {
       })
   }
 
-  fetchAPIData = async (array) => {
+  fetchAPIData = (array) => {
     array.forEach(healthCenter => {
       let clinic = healthCenter.attributes
       let coordinates = healthCenter.geometry
@@ -63,20 +63,26 @@ class App extends Component {
         longitude: coordinates.x,
         new_patients: isAccepting
       }
+
       
-      this.setState({
-        listOfClinics: [...this.state.listOfClinics, clinics]
-      })
       this.addClinic(clinics)
+    })
+
+    fetch('http://localhost:3000/clinics')
+    .then(resp=>resp.json())
+    .then(array=>{
+      array.forEach(clinic => {
+        this.setState({
+          listOfClinics: [...this.state.listOfClinics, clinic]
+        })
+      })
     })
   }
 
   filterClinics = () => {
-    return this.state.listOfClinics.map(clinic => {
-      if (clinic.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())) {
-        return clinic
-      }
-    })
+    return this.state.listOfClinics.filter(clinic =>
+      clinic.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())
+    )
   }
 
   renderClinicCont = () => {
@@ -122,11 +128,11 @@ class App extends Component {
     }
   }
 
-  renderClinicInfo = (props, clinic) => {
-    return (
-        <ClinicInfo name={this.props.currentClinic.name}/>
-    )
-  }
+  // renderClinicInfo = (props, clinic) => {
+  //   return (
+  //       <ClinicInfo name={this.props.currentClinic.name}/>
+  //   )
+  // }
 
   userLogin = (event) => {
     event.preventDefault()
@@ -166,19 +172,22 @@ class App extends Component {
   userLogout = (event) => {
     this.setState({
       user: null,
-      appointments: null
+      appointments: null,
+      userClinics: null
     })
     
   }
 
-  onClinicSelect = (props, marker) => {
-    debugger
-    // let selectedClinic = this.state.listOfClinics.find(clinic => clinic.address_id === clinicId)
-    
-    // this.setState({
-    //   currentClinic: selectedClinic
-    // })
-  }
+  onClinicSelect = (props) => {
+    let clinicId = props.id
+    let selectedClinic = this.state.listOfClinics.find(clinic => clinic.id === clinicId)
+    this.setState({
+      currentClinic: selectedClinic
+    })
+    return (
+      <Redirect to={`/clinics/${clinicId}`} />
+    )
+}
 
   render(){
     return (
@@ -196,12 +205,11 @@ class App extends Component {
           <Route exact path="/appointments" render={() =>
             this.renderAppointment()
           }/>
-          <Route exact path="/clinics/:address_id" render={(props) => {
+          <Route exact path="/clinics/:id" render={(props) => {
             let id = props.match.params.id
             let clinic = this.state.listOfClinics.find(clinic => clinic.id === id)
-            console.log("what is clinic?", props)
-            // this.renderClinicInfo()
-            return <ClinicInfo name={this.props.currentClinic}/>
+            console.log("what is clinic?", clinic)
+            return <ClinicInfo clinic={clinic}/>
           }}/>
         </Switch>
       </div>

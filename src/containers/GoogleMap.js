@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
+import {Map, Marker, InfoWindow, GoogleApiWrapper} from 'google-maps-react';
+import {Redirect} from 'react-router-dom'
 
 const apiKey= 'AIzaSyBp4sd7Eh41b6SsZhJTSst_twS7zhYgtsI'
 
@@ -11,7 +12,9 @@ export class MapContainer extends Component {
                 lat: 38.898074,
                 lng: -77.032864
             },
-            zoom: 12
+            zoom: 12,
+            activeMarker: {},
+            showingInfoWindow: false
         }
     }
 
@@ -20,37 +23,48 @@ export class MapContainer extends Component {
         let array = this.props.listOfClinics
         if (array.length !== 0) {
             return array.map(place => {
-                return (<Marker
-                    key={place.address_id}
-                    position={
-                        {lat: place.latitude,
-                        lng: place.longitude}}
-                    name={place.name}
-                    onClick={this.onMarkerClick}
-                />
+                return (
+                    
+                        <Marker
+                            key={place.address_id}
+                            position={
+                                {lat: place.latitude,
+                                lng: place.longitude}}
+                            name={place.name}
+                            id={place.id}
+                            onClick={this.onMarkerClick}
+                            onMouseover={this.onHover}
+                        />
+                        
+                    
                 )
-                }
+            }
             )
         }
     }
 
+    onHover = () => {
+        
+    }
+
     onMarkerClick = (props, marker) => {
-        this.props.onClinicSelect(props, marker)
+        this.props.onClinicSelect(props)
+        this.setState({
+            activeMarker: marker,
+            showingInfoWindow: true
+        })
+    }
+    
+    onMapClick =() => {
+        if (this.state.showingInfoWindow) {
+            this.setState({
+                showingInfoWindow: false
+            })
+        }
     }
 
     render() {
         return (
-            // <div style={{ height: '600px', width: '60%' }}>
-            //     <GoogleMapComponent
-            //         // bootstrapURLKeys={{
-            //         //     key: apiKey
-            //         // }}
-            //         defaultCenter={this.state.center}
-            //         defaultZoom={this.state.zoom}
-            //     >
-            //         {this.renderClinics(this.props.listOfClinics)}
-            //     </GoogleMapComponent>
-            // </div>
             <Map 
                 google={this.props.google}
                 style={{
@@ -61,6 +75,7 @@ export class MapContainer extends Component {
                     this.state.center
                 }
                 zoom={this.state.zoom}
+                onClick={this.onMapClick}
             >
                 {this.renderClinics()}
             </Map>
