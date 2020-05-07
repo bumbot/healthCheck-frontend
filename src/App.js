@@ -235,6 +235,7 @@ class App extends Component {
   }
 
   renderClinicInfo = (props) => {
+
     let id = parseInt(props.match.params.id)
     let clinic = this.state.listOfClinics.find(clinic => clinic.id === id)
 
@@ -513,8 +514,8 @@ class App extends Component {
           <Route exact path="/appointments" render={() =>
             this.renderAppointment()
           }/>
-          <Route exact path="/clinics/:id" render={() =>
-            this.renderClinicInfo()
+          <Route exact path="/clinics/:id" render={(props) =>
+            this.renderClinicInfo(props)
           }/>
           <Route key="login" exact path="/login" render={() =>
             this.renderLogin()
