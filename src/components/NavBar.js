@@ -1,46 +1,46 @@
 import React, {Component} from 'react';
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import {Link} from 'react-router-dom'
+import {NavLink} from 'react-router-dom'
 
 export default class NavBar extends Component {
     render(){
         return (
             <div>
-                <Navbar bg="light" expand="lg" position="fixed">
+                <Navbar bg="light" variant="light" expand="lg" position="top" sticky="top">
                     <Navbar.Brand>
-                        <Link to='/'>
+                        <NavLink className="link-text" to='/'>
                             HealthCheck
-                        </Link>
+                        </NavLink>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
                             <Nav.Link>
-                                <Link to='/search'>
+                                <NavLink className="link-text" to='/search'>
                                     Search
-                                </Link>
+                                </NavLink>
                             </Nav.Link>
                             {this.props.user ? <>
                             <Nav.Link>
-                            <Link to='/appointments'>
+                            <NavLink className="link-text" to='/appointments'>
                                 Appointments
-                            </Link>
+                            </NavLink>
                             </Nav.Link>
                             <Nav.Link>
-                                <Link onClick={this.props.logout} to='/login'>
+                                <NavLink className="link-text" onClick={this.props.logout} to='/login'>
                                     Logout
-                                </Link>
+                                </NavLink>
                             </Nav.Link> </> : <>
                                 <Nav.Link>
-                                    <Link to='/login'>
+                                    <NavLink className="link-text" to='/login'>
                                         Login
-                                    </Link>
+                                    </NavLink>
                                 </Nav.Link>
                                 <Nav.Link>
-                                    <Link to='/new'>
+                                    <NavLink className="link-text" to='/new'>
                                         New User?
-                                    </Link>
+                                    </NavLink>
                                 </Nav.Link>
                             </>}
                         </Nav>
@@ -50,3 +50,5 @@ export default class NavBar extends Component {
         )
     }
 }
+
+

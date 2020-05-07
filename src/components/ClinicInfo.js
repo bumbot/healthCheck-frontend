@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button'
 import {Redirect} from 'react-router-dom'
+import Jumbotron from 'react-bootstrap/Jumbotron'
+import ListGroup from 'react-bootstrap/ListGroup'
 
 export default class ClinicInfo extends Component {
     constructor() {
@@ -24,18 +26,26 @@ export default class ClinicInfo extends Component {
         } else {
             return (
                 <div>
-                    <h1>
-                        {this.props.name}
-                    </h1>
-                    <h2>
-                        {`${this.props.address}, ${this.props.city}, ${this.props.state}, ${this.props.zip}`}
-                    </h2>
-                    <h3>
-                        Phone Number: {this.props.phoneNumber}<br/>
-                        Website: {this.props.website}<br/>
-                        Accepting new patients?: {this.props.newPatients ? "Yes" : "No"}
-                    </h3>
-                    {(this.props.user && this.props.newPatients)? <Button variant='secondary' onClick={this.onBtnClick}>Create Appointment</Button> : null}
+                    <Jumbotron>
+                        <h1>
+                            {this.props.name}
+                        </h1>
+                        <ListGroup >
+                            <ListGroup.Item>
+                                {`Address: ${this.props.address}, ${this.props.city}, ${this.props.state}, ${this.props.zip}`}
+                            </ListGroup.Item>
+                            <ListGroup.Item>
+                                Phone Number: {this.props.phoneNumber}
+                            </ListGroup.Item>
+                            <ListGroup.Item>
+                                Website: {this.props.website}
+                            </ListGroup.Item>
+                            <ListGroup.Item>
+                                Accepting new patients?: {this.props.newPatients ? "Yes" : "No"}
+                            </ListGroup.Item>
+                        </ListGroup>
+                        {(this.props.user && this.props.newPatients)? <Button variant='secondary' onClick={this.onBtnClick}>Create Appointment</Button> : null}
+                    </Jumbotron>
                 </div>
             )
         }

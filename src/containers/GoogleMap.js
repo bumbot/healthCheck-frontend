@@ -81,20 +81,22 @@ export class MapContainer extends Component {
             return <Redirect to={this.state.redirectTo}/>
         } else {
             return (
-                <Map 
-                    google={this.props.google}
-                    style={{
-                        position: 'relative',  
-                        width: '80%',
-                        height: '600px'}}
-                    initialCenter={
-                        this.state.center
-                    }
-                    zoom={this.state.zoom}
-                    onClick={this.onMapClick}
-                >
-                    {this.renderClinics()}
-                </Map>
+                <div className="map">
+                    <Map
+                        google={this.props.google}
+                        style={{
+                            position: 'fixed',  
+                            width: '100%',
+                            height: '100%'}}
+                        initialCenter={
+                            this.state.center
+                        }
+                        zoom={this.state.zoom}
+                        onClick={this.onMapClick}
+                    >
+                        {this.renderClinics()}
+                    </Map>
+                    </div>
             )
         }
     }

@@ -7,6 +7,7 @@ import ClinicInfo from './components/ClinicInfo'
 import ApptForm from './components/ApptForm'
 import Welcome from './components/Welcome'
 import {Route, Switch, Redirect} from 'react-router-dom'
+import './App.css';
 
 class App extends Component {
 
@@ -34,6 +35,17 @@ class App extends Component {
       let coordinates = healthCenter.geometry
       let isAccepting;
       clinic["DCGIS.PRIMARY_CARE_INFO.ACCEPT_NEW_PT"] === "Yes" ? isAccepting = true : isAccepting = false;
+
+      let walk_in = clinic["PrimaryCarePt.WALKIN_UNSCHEDULED"]
+      let limited_access = clinic["DCGIS.PRIMARY_CARE_INFO.LIMITED_ACCESS"]
+      let public_insurance = clinic["DCGIS.PRIMARY_CARE_INFO.PUBLIC_INSURANCE"]
+      let medicaid = clinic["DCGIS.PRIMARY_CARE_INFO.MEDICAID"]
+      let medicare = clinic["DCGIS.PRIMARY_CARE_INFO.MEDICARE"]
+      let private_employer_insurance = clinic["DCGIS.PRIMARY_CARE_INFO.PRIVATE_EMPLOYER_INSURANCE"]
+      let private_insurance = clinic["DCGIS.PRIMARY_CARE_INFO.PRIVATE_INSURANCE"]
+      debugger
+      let facility_type = clinic["DCGIS.PRIMARY_CARE_INFO.FACILITY_TYPE"]
+
 
       let clinics = {
         name: clinic["PrimaryCarePt.NAME"],
@@ -153,7 +165,7 @@ class App extends Component {
         console.log("error")
         alert(obj.message)
       } else {
-        
+
         obj.user_appts.forEach(appt => {
           let time = appt.appointment_time
           let hour = parseInt(time.slice(0,2))
@@ -305,7 +317,11 @@ class App extends Component {
             if (this.state.user) {
               return <Redirect to='/search'/>
             } else {
-              return <Login userLogin={this.newUserCreate} title="Create a New User"/>
+              return (
+              <div className="signup">
+                <Login userLogin={this.newUserCreate} title="Create a New User"/>
+              </div>
+              )
             }
           }}/>
           <Route exact path="/appointment/new/:id" render={(props) => {

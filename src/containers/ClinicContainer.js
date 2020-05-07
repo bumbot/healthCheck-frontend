@@ -5,7 +5,7 @@ import SearchBar from '../components/SearchBar'
 export default class ClinicContainer extends Component {
     render() {
         return (
-            <div>
+            <div className="search-cont">
                 <SearchBar
                     searchTerm={this.props.searchTerm}
                     updateSearch={this.props.updateSearch}

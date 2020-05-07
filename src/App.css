@@ -1,40 +1,40 @@
-.App {
+body {
+  background-color: rgb(38, 64, 80) !important;
+  color: rgb(163, 192, 211) !important;
+}
+
+.welcome-bg {
+  background-image: url("./images/welcome-splash.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-bottom: 20%;
+  padding-top: 10%;
+  background-position: center;
+}
+
+.welcome {
+  padding-bottom: 10%;
   text-align: center;
+  display: block;
+  margin-left: 2%;
+  text-align: left;
+  color: rgb(163, 192, 211);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.welcome h4 {
+  margin-right: 55%
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.link-text {
+  color: #767676
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+a.link-text:hover {
+  color: rgb(90, 161, 202);
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+a.link-text:active {
+  color:black
 }
 
 .login, .signup {
@@ -42,5 +42,27 @@
 }
 
 .login-form {
+  margin-top: 3%;
   display: inline-block;
+}
+
+.search-cont {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  text-align: center;
+  background-color: rgb(162, 172, 177);
+}
+.search-bar {
+  margin: 2% auto 0px 10%;
+  width: 80%;
+}
+
+.map {
+  width: 100%;
+  height: 100%
+}
+
+.jumbotron h1 {
+  color: #767676;
 }
