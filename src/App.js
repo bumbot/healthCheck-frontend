@@ -15,33 +15,17 @@ class App extends Component {
     this.state = {
       searchTerm: "",
       user: null,
+      userId: null,
       appointments: null,
       userClinics: null,
       listOfClinics: []
     }
   }
 
-  updateSearch = (event) => {
-    this.setState({
-      searchTerm: event.target.value
-    })
-  }
-
   componentDidMount() {
     fetch('https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Health_WebMercator/MapServer/7/query?where=1%3D1&outFields=*&outSR=4326&f=json')
     .then(resp => resp.json())
     .then(listOfCenters => this.fetchAPIData(listOfCenters.features))
-  }
-
-  addClinic = (obj) => {
-    fetch('http://localhost:3000/clinics', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(obj)
-      })
   }
 
   fetchAPIData = (array) => {
@@ -77,6 +61,24 @@ class App extends Component {
           listOfClinics: [...this.state.listOfClinics, clinic]
         })
       })
+    })
+  }
+
+  addClinic = (obj) => {
+    fetch('http://localhost:3000/clinics', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(obj)
+      }
+    )
+  }
+
+  updateSearch = (event) => {
+    this.setState({
+      searchTerm: event.target.value
     })
   }
 
@@ -128,14 +130,6 @@ class App extends Component {
     }
   }
 
-  // renderNewUser = () => {
-  //   return (
-  //     <div className="signup">
-  //       <Login userLogin={this.newUserCreate} title="Create a New User"/>
-  //     </div>
-  //   )
-  // }
-
   userLogin = (event) => {
     event.preventDefault()
     let name = event.target.children[0].children[1].value
@@ -159,9 +153,30 @@ class App extends Component {
         console.log("error")
         alert(obj.message)
       } else {
+        
+        obj.user_appts.forEach(appt => {
+          let time = appt.appointment_time
+          let hour = parseInt(time.slice(0,2))
+          let minutes = time.slice(2,5)
+          if (hour === 0 || hour === 24) {
+            appt.appointment_time = `12${minutes}am`
+          } else if (hour === 12) {
+            appt.appointment_time = `12${minutes}pm`
+          } else if (hour > 0 && hour < 12) {
+              if (hour < 10) {
+                appt.appointment_time = `0${hour}${minutes}am`
+              } else {
+                appt.appointment_time = `${hour}${minutes}am`
+              }
+          } else if (hour > 12 && hour < 24) {
+            appt.appointment_time = `${hour}${minutes}pm`
+          }
+        })
+
         console.log("success");
         this.setState({
-          user: obj.user_data,
+          user: obj.user_data.username,
+          userId: obj.user_data.id,
           appointments: obj.user_appts,
           userClinics: obj.user_clinics
         })
@@ -195,8 +210,10 @@ class App extends Component {
         alert(obj.message)
       } else {
         console.log("success");
+        debugger
         this.setState({
-          user: obj.user_data,
+          user: obj.user_data.username,
+          userId: obj.user_data.id,
           appointments: obj.user_appts,
           userClinics: obj.user_clinics
         })
@@ -242,7 +259,38 @@ class App extends Component {
   }
 
   createAppt = (event) => {
-    debugger
+    let date = event.nativeEvent.target[0].value
+    let hour = event.nativeEvent.target[1].value.slice(-2)
+    let time = event.nativeEvent.target[1].value.slice(0,-2)
+    let clinicId = parseInt(event.target.children[2].id)
+
+    let payload = {
+      user: this.state.userId,
+      clinic: clinicId,
+      appointment_date: date,
+      appointment_hour: hour,
+      appointment_time: time
+    }
+    
+    fetch('http://localhost:3000/appointments', {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    }).then(resp=>resp.json())
+    .then(obj=>{
+      if (obj.error) {
+        alert(obj.message)
+      } else {
+        this.setState({
+          appointments: obj.user_data.user_appts,
+          userClinics: obj.user_data.user_clinics
+        })
+      }
+    })
+
   }
 
   render(){

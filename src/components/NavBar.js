@@ -21,17 +21,17 @@ export default class NavBar extends Component {
                                     Search
                                 </Link>
                             </Nav.Link>
+                            {this.props.user ? <>
                             <Nav.Link>
-                                <Link to='/appointments'>
-                                    Appointments
-                                </Link>
+                            <Link to='/appointments'>
+                                Appointments
+                            </Link>
                             </Nav.Link>
-                            {this.props.user ?
                             <Nav.Link>
                                 <Link onClick={this.props.logout} to='/login'>
                                     Logout
                                 </Link>
-                            </Nav.Link> : <>
+                            </Nav.Link> </> : <>
                                 <Nav.Link>
                                     <Link to='/login'>
                                         Login
