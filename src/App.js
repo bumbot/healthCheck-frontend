@@ -233,6 +233,74 @@ class App extends Component {
     }
   }
 
+  renderClinicInfo = (props) => {
+    let id = parseInt(props.match.params.id)
+    let clinic = this.state.listOfClinics.find(clinic => clinic.id === id)
+
+    let name = clinic.name
+    let address = clinic.address
+    let city = clinic.city
+    let state = clinic.state
+    let zip = clinic.zip
+    let phoneNumber = clinic.phone_number
+    let website = clinic.website_url
+    let newPatients = clinic.new_patients
+
+    let specialities = {
+      "Accepting Walk-ins?: ": clinic.accept_walkin,
+      "Limited Access to: ": clinic.limited_access,
+      "Accepts Public Insurance?: ": clinic.public_insurance,
+      "Accepts Medicaid?: ": clinic.medicaid,
+      "Accepts Medicare?: ": clinic.medicare,
+      "Accepts Private Insurance?: ": clinic.private_insurance,
+      "Accepts Private Employer Insurance?: ": clinic.private_employer_insurance,
+      "Facility Type: ": clinic.facility_type,
+
+      "Child Special Needs?: ": clinic.child_special_needs,
+      "Elderly: ": clinic.elderly,
+      "HIV Testing: ": clinic.hiv,
+      "Homeless Care: ": clinic.homeless,
+      "LGBT Friendly: ": clinic.lgbt,
+      "Intellectually Disabled Care: ": clinic.intellect_disabled,
+      "Physically Disabled Care: ": clinic.physical_disabled,
+      "Mental Illness: ": clinic.mental_illness,
+      "Cardiology: ": clinic.cardiology,
+      "Endocrinology: ": clinic.endocrinology,
+      "General Surgery: ": clinic.general_surgery,
+      "HIV/AIDS Treatment: ": clinic.hiv_aids,
+      "Infectious Disease Care": clinic.infectious_disease,
+      "Nephrology: ": clinic.nephrology,
+      "Neurology: ": clinic.neurology,
+      "Obstetrics: ": clinic.obstetrics,
+      "Oncology: ": clinic.oncology,
+      "Opthalmology: ": clinic.opthalmology,
+      "Oral Surgery": clinic.oral_surgery,
+      "Orthopedic: ": clinic.orthopedic,
+      "Gastroenterology: ": clinic.gastroenterology,
+      "Pediatrics: ": clinic.pediatrics,
+      "Podiatry: ": clinic.podiatry,
+      "Pulmonary Medicine: ": clinic.pulmonary,
+      "Rheumatology: ": clinic.rheumatology,
+      "Reproductive Health: ": clinic.reproductive_health,
+      "STI Testing/Treatment: ": clinic.sti_test,
+      "Urology: ": clinic.urology,
+      "Dentistry: ": clinic.dentistry
+    }
+
+    return <ClinicInfo
+      name={name}
+      address={address}
+      city={city}
+      state={state}
+      zip={zip}
+      phoneNumber={phoneNumber}
+      website={website}
+      newPatients={newPatients}
+      id={id}
+      user={this.state.user}
+      specialities={specialities}/>
+  }
+
   renderLogin = () => {
     if (!this.state.user || this.state.user === null) {
       return (
@@ -381,7 +449,7 @@ class App extends Component {
     let time = event.nativeEvent.target[1].value.slice(0,-2)
     let clinicId = parseInt(event.target.children[3].id)
     let reason = event.nativeEvent.target[2].value
-    debugger
+
     let payload = {
       user: this.state.userId,
       clinic: clinicId,
@@ -444,30 +512,9 @@ class App extends Component {
           <Route exact path="/appointments" render={() =>
             this.renderAppointment()
           }/>
-          <Route exact path="/clinics/:id" render={(props) => {
-            let id = parseInt(props.match.params.id)
-            let clinic = this.state.listOfClinics.find(clinic => clinic.id === id)
-
-            let name = clinic.name
-            let address = clinic.address
-            let city = clinic.city
-            let state = clinic.state
-            let zip = clinic.zip
-            let phoneNumber = clinic.phone_number
-            let website = clinic.website_url
-            let newPatients = clinic.new_patients
-            return <ClinicInfo
-              name={name}
-              address={address}
-              city={city}
-              state={state}
-              zip={zip}
-              phoneNumber={phoneNumber}
-              website={website}
-              newPatients={newPatients}
-              id={id}
-              user={this.state.user}/>
-          }}/>
+          <Route exact path="/clinics/:id" render={(props) =>
+            this.renderClinicInfo(props)
+          }/>
           <Route key="login" exact path="/login" render={() =>
             this.renderLogin()
           }/>
