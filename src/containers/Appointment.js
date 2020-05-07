@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import CardColumns from 'react-bootstrap/CardColumns'
+import ListGroup from 'react-bootstrap/ListGroup'
 
 export default class Appointment extends Component {
 
@@ -11,15 +14,21 @@ export default class Appointment extends Component {
         for (let i = 0; i < appts.length; i++) {
             array.push(
                 <>
-                <li>
-                    Clinic Name: {clinics[i].name}<br></br>
-                    Date: {appts[i].appointment_date}<br></br>
-                    Time: {appts[i].appointment_time}<br></br>
-                    Reason for Visit: {appts[i].reason_for_visit}
-                </li>
-                <Button type="submit" value={appts[i].id} onClick={this.props.deleteAppt}>
-                    Delete    
-                </Button>
+                <Card border='info' bg="secondary">
+                    <Card.Body>
+                        <Card.Title>Clinic Name: {clinics[i].name}</Card.Title>
+                        <Card.Text>
+                            Reason for Visit: {appts[i].reason_for_visit}
+                        </Card.Text>
+                        <ListGroup className="list-group-flush">
+                            <ListGroup.Item>Appointment Date: {appts[i].appointment_date}</ListGroup.Item>
+                            <ListGroup.Item>Appointment Time: {appts[i].appointment_time}</ListGroup.Item>
+                        </ListGroup>
+                        <Button type="submit" value={appts[i].id} onClick={this.props.deleteAppt}>
+                            Delete    
+                        </Button>
+                    </Card.Body>
+                </Card>
                 </>
             )
         }
@@ -31,9 +40,9 @@ export default class Appointment extends Component {
         return(
             <div>
                 <h1>Scheduled Appointments</h1>
-                <ol>
+                <CardColumns>
                     {this.renderUserAppointments()}
-                </ol>
+                </CardColumns>
             </div>
         )
     }

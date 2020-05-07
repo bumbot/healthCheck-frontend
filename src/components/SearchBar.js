@@ -11,7 +11,6 @@ export default class SearchContainer extends Component {
                         <InputGroup.Text id="inputGroup-sizing-default">Search by Name</InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
-                        aria-describedby="basic-addon1"
                         placeholder={"Start entering a name!"}
                         onChange={this.props.updateSearch}
                     />

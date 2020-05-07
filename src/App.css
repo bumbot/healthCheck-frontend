@@ -1,19 +1,19 @@
 body {
   background-color: rgb(38, 64, 80) !important;
   color: rgb(163, 192, 211) !important;
+  font-family: Arial, Verdana !important;
 }
 
 .welcome-bg {
   background-image: url("./images/welcome-splash.jpg");
   background-size: cover;
   background-repeat: no-repeat;
-  padding-bottom: 20%;
-  padding-top: 10%;
-  background-position: center;
+  background-position: fill;
 }
 
 .welcome {
-  padding-bottom: 10%;
+  margin-right: 60%;
+  padding-top: 180px;
   text-align: center;
   display: block;
   margin-left: 2%;
@@ -22,7 +22,21 @@ body {
 }
 
 .welcome h4 {
-  margin-right: 55%
+  padding-top: 2px;
+}
+
+.login-card {
+  position: relative;
+  text-align: center;
+  margin-left: 60%;
+  height: 600px;
+  width: 500px;
+  bottom: 40%;
+  z-index: 10;
+}
+
+.login-card input {
+  text-align: center;
 }
 
 .link-text {
@@ -44,6 +58,7 @@ a.link-text:active {
 .login-form {
   margin-top: 3%;
   display: inline-block;
+  padding: 1% 5% 3% 5%;
 }
 
 .search-cont {
@@ -54,7 +69,7 @@ a.link-text:active {
   background-color: rgb(162, 172, 177);
 }
 .search-bar {
-  margin: 2% auto 0px 10%;
+  margin: 2% auto 0px auto;
   width: 80%;
 }
 

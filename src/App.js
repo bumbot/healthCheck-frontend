@@ -206,17 +206,18 @@ class App extends Component {
   }
 
   renderClinicCont = () => {
-      return (
-        <div>
-          <ClinicContainer
-            listOfClinics={this.filterClinicNames()}
-            searchTerm={this.state.searchTerm}
-            updateSearch={this.updateSearch}
-            handleSubmit={this.handleSubmit}
-            currentClinic={this.state.currentClinic}
-          />
-        </div>
-      )
+    return (
+      <div>
+        <ClinicContainer
+          listOfClinics={this.filterClinicNames()}
+          searchTerm={this.state.searchTerm}
+          updateSearch={this.updateSearch}
+          handleSubmit={this.handleSubmit}
+          currentClinic={this.state.currentClinic}
+          filteredSearch={this.filteredSearch}
+        />
+      </div>
+    )
   }
 
   renderAppointment = () => {
@@ -512,13 +513,15 @@ class App extends Component {
           <Route exact path="/appointments" render={() =>
             this.renderAppointment()
           }/>
-          <Route exact path="/clinics/:id" render={(props) =>
-            this.renderClinicInfo(props)
+          <Route exact path="/clinics/:id" render={() =>
+            this.renderClinicInfo()
           }/>
           <Route key="login" exact path="/login" render={() =>
             this.renderLogin()
           }/>
-          <Route exact path='/' component={Welcome}/>
+          <Route exact path='/' render={() => {
+            return <Welcome user={this.state.user} userLogin={this.userLogin}/>
+          }}/>
         </Switch>
       </div>
     )
