@@ -36,15 +36,81 @@ class App extends Component {
       let isAccepting;
       clinic["DCGIS.PRIMARY_CARE_INFO.ACCEPT_NEW_PT"] === "Yes" ? isAccepting = true : isAccepting = false;
 
-      let walk_in = clinic["PrimaryCarePt.WALKIN_UNSCHEDULED"]
-      let limited_access = clinic["DCGIS.PRIMARY_CARE_INFO.LIMITED_ACCESS"]
-      let public_insurance = clinic["DCGIS.PRIMARY_CARE_INFO.PUBLIC_INSURANCE"]
-      let medicaid = clinic["DCGIS.PRIMARY_CARE_INFO.MEDICAID"]
-      let medicare = clinic["DCGIS.PRIMARY_CARE_INFO.MEDICARE"]
-      let private_employer_insurance = clinic["DCGIS.PRIMARY_CARE_INFO.PRIVATE_EMPLOYER_INSURANCE"]
-      let private_insurance = clinic["DCGIS.PRIMARY_CARE_INFO.PRIVATE_INSURANCE"]
-      debugger
-      let facility_type = clinic["DCGIS.PRIMARY_CARE_INFO.FACILITY_TYPE"]
+      let walk_in = (clinic["PrimaryCarePt.WALKIN_UNSCHEDULED"] !== null && clinic["PrimaryCarePt.WALKIN_UNSCHEDULED"].toLowerCase().includes("yes")) ? clinic["PrimaryCarePt.WALKIN_UNSCHEDULED"] : "No/Please Call"
+
+      let limited_access = (clinic["DCGIS.PRIMARY_CARE_INFO.LIMITED_ACCESS"] === "No" || clinic["DCGIS.PRIMARY_CARE_INFO.LIMITED_ACCESS"] === " ") ? "No" : clinic["DCGIS.PRIMARY_CARE_INFO.LIMITED_ACCESS"]
+      
+      let public_insurance = (clinic["DCGIS.PRIMARY_CARE_INFO.PUBLIC_INSURANCE"] !== null && clinic["DCGIS.PRIMARY_CARE_INFO.PUBLIC_INSURANCE"].toLowerCase().includes("yes")) ? "Yes" : "No/Please Call"
+      
+      let medicaid = (clinic["DCGIS.PRIMARY_CARE_INFO.MEDICAID"] !== null && clinic["DCGIS.PRIMARY_CARE_INFO.MEDICAID"].toLowerCase().includes("yes")) ? "Yes" : "No"
+      
+      let medicare = (clinic["DCGIS.PRIMARY_CARE_INFO.MEDICARE"] === " ") ? "No" : clinic["DCGIS.PRIMARY_CARE_INFO.MEDICARE"]
+      
+      let private_employer_insurance = (clinic["DCGIS.PRIMARY_CARE_INFO.PRIVATE_EMPLOYER_INSURANCE"] === " ") ? "No" : clinic["DCGIS.PRIMARY_CARE_INFO.PRIVATE_EMPLOYER_INSURANCE"]
+      
+      let private_insurance = (clinic["DCGIS.PRIMARY_CARE_INFO.PRIVATE_INSURANCE"] === " ") ?
+      "No" : clinic["DCGIS.PRIMARY_CARE_INFO.PRIVATE_INSURANCE"]
+
+      let facility_type = (clinic["DCGIS.PRIMARY_CARE_INFO.FACILITY_TYPE"] === " ") ? "n/a" : clinic["DCGIS.PRIMARY_CARE_INFO.FACILITY_TYPE"]
+
+      //specialities
+      let child_special_needs = (clinic["DCGIS.PRIMARY_CARE_INFO.CHILD_SPECIAL_NEEDS"] === " ") ? false : true 
+
+      let elderly = (clinic["DCGIS.PRIMARY_CARE_INFO.ELDERLY"] === " ") ? false : true
+
+      let hiv = (clinic["DCGIS.PRIMARY_CARE_INFO.HIV"] === " ") ? false : true
+
+      let homeless = (clinic["DCGIS.PRIMARY_CARE_INFO.HOMELESS"] === " ") ? false : true
+
+      let lgbt = (clinic["DCGIS.PRIMARY_CARE_INFO.LBGT"] === " ") ? false : true
+
+      let intellect_disabled = (clinic["DCGIS.PRIMARY_CARE_INFO.INTEL_DISABLED"] === " ") ? false : true
+
+      let physical_disabled = (clinic["DCGIS.PRIMARY_CARE_INFO.PHYSICALLY_DISABLED"] === " ") ? false : true
+
+      let mental_illness = (clinic["DCGIS.PRIMARY_CARE_INFO.MENTAL_ILLNESS"] === " ") ? false : true
+
+      let cardiology = (clinic["DCGIS.PRIMARY_CARE_INFO.CARDIOLOGY"] === " ") ? false : true
+
+      let endocrinology = (clinic["DCGIS.PRIMARY_CARE_INFO.ENDOCRINOLOGY"] === " ") ? false : true
+
+      let general_surgery = (clinic["DCGIS.PRIMARY_CARE_INFO.GENERAL_SURGERY"] === " ") ? false : true
+      
+      let hiv_aids = (clinic["DCGIS.PRIMARY_CARE_INFO.HIV_AIDS"] === " ") ? false : true
+      
+      let infectious_disease = (clinic["DCGIS.PRIMARY_CARE_INFO.INFECTIOUS_DISEASE"] === " ") ? false : true
+      
+      let nephrology = (clinic["DCGIS.PRIMARY_CARE_INFO.NEPHROLOGY"] === " ") ? false : true
+      
+      let neurology = (clinic["DCGIS.PRIMARY_CARE_INFO.NEUROLOGY"] === " ") ? false : true
+      
+      let obstetrics = (clinic["DCGIS.PRIMARY_CARE_INFO.OBSTETRICS"] === " ") ? false : true
+      
+      let oncology = (clinic["DCGIS.PRIMARY_CARE_INFO.ONCOLOGY"] === " ") ? false : true
+      
+      let opthalmology = (clinic["DCGIS.PRIMARY_CARE_INFO.OPTHALMOLOGY"] === " ") ? false : true
+      
+      let oral_surgery = (clinic["DCGIS.PRIMARY_CARE_INFO.ORAL_SURGERY"] === " ") ? false : true
+      
+      let orthopedic = (clinic["DCGIS.PRIMARY_CARE_INFO.ORTHOPEDIC"] === " ") ? false : true
+      
+      let gastroenterology = (clinic["DCGIS.PRIMARY_CARE_INFO.GASTROENTEROLOGY"] === " ") ? false : true
+      
+      let pediatrics = (clinic["DCGIS.PRIMARY_CARE_INFO.PEDIATRICS"] === " ") ? false : true
+      
+      let podiatry = (clinic["DCGIS.PRIMARY_CARE_INFO.PODIATRY"] === " ") ? false : true
+      
+      let pulmonary = (clinic["DCGIS.PRIMARY_CARE_INFO.PULMONARY_MEDICINE"] === " ") ? false : true
+      
+      let rheumatology = (clinic["DCGIS.PRIMARY_CARE_INFO.RHEUMATOLOGY"] === " ") ? false : true
+      
+      let reproductive_health = (clinic["DCGIS.PRIMARY_CARE_INFO.REPRODUCTIVE_HEALTH"] === " ") ? false : true
+      
+      let sti_test = (clinic["DCGIS.PRIMARY_CARE_INFO.STI_TEST_TREAT"] === " ") ? false : true
+      
+      let urology = (clinic["DCGIS.PRIMARY_CARE_INFO.UROLOGY"] === " ") ? false : true
+      
+      let dentistry = (clinic["DCGIS.PRIMARY_CARE_INFO.DENTISTRY"] === " ") ? false : true
 
 
       let clinics = {
@@ -58,9 +124,48 @@ class App extends Component {
         website_url: clinic["PrimaryCarePt.WEB_URL"],
         latitude: coordinates.y,
         longitude: coordinates.x,
-        new_patients: isAccepting
-      }
+        new_patients: isAccepting,
 
+        walk_in: walk_in,
+        limited_access: limited_access,
+        public_insurance: public_insurance,
+        medicaid: medicaid,
+        medicare: medicare,
+        private_employer_insurance: private_employer_insurance,
+        private_insurance: private_insurance,
+        facility_type: facility_type,
+
+
+        child_special_needs: child_special_needs,
+        elderly: elderly,
+        hiv: hiv,
+        homeless: homeless,
+        lgbt: lgbt,
+        intellect_disabled: intellect_disabled,
+        physical_disabled: physical_disabled,
+        mental_illness: mental_illness,
+        cardiology: cardiology,
+        endocrinology: endocrinology,
+        general_surgery: general_surgery,
+        hiv_aids: hiv_aids,
+        infectious_disease: infectious_disease,
+        nephrology: nephrology,
+        neurology: neurology,
+        obstetrics: obstetrics,
+        oncology: oncology,
+        opthalmology: opthalmology,
+        oral_surgery: oral_surgery,
+        orthopedic: orthopedic,
+        gastroenterology: gastroenterology,
+        pediatrics: pediatrics,
+        podiatry: podiatry,
+        pulmonary: pulmonary,
+        rheumatology: rheumatology,
+        reproductive_health: reproductive_health,
+        sti_test: sti_test,
+        urology: urology,
+        dentistry: dentistry
+      }
       
       this.addClinic(clinics)
     })
@@ -222,7 +327,7 @@ class App extends Component {
         alert(obj.message)
       } else {
         console.log("success");
-        debugger
+
         this.setState({
           user: obj.user_data.username,
           userId: obj.user_data.id,
@@ -274,14 +379,16 @@ class App extends Component {
     let date = event.nativeEvent.target[0].value
     let hour = event.nativeEvent.target[1].value.slice(-2)
     let time = event.nativeEvent.target[1].value.slice(0,-2)
-    let clinicId = parseInt(event.target.children[2].id)
-
+    let clinicId = parseInt(event.target.children[3].id)
+    let reason = event.nativeEvent.target[2].value
+    debugger
     let payload = {
       user: this.state.userId,
       clinic: clinicId,
       appointment_date: date,
       appointment_hour: hour,
-      appointment_time: time
+      appointment_time: time,
+      reason_for_visit: reason
     }
     
     fetch('http://localhost:3000/appointments', {

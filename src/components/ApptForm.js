@@ -47,6 +47,12 @@ export default class ApptForm extends Component {
                                 </Form.Control>
                             </Form.Row>
                         </Form.Group>
+                        <Form.Group>
+                            <Form.Row>
+                                <Form.Label>Reason for Visit</Form.Label>
+                                <Form.Control as="textarea" rows="3" />
+                            </Form.Row>
+                        </Form.Group>
                         <Button id={this.props.clinic.id} type="submit">Submit</Button>
                     </Form>
                 </div>

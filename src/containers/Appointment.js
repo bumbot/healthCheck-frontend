@@ -14,7 +14,8 @@ export default class Appointment extends Component {
                 <li>
                     Clinic Name: {clinics[i].name}<br></br>
                     Date: {appts[i].appointment_date}<br></br>
-                    Time: {appts[i].appointment_time}
+                    Time: {appts[i].appointment_time}<br></br>
+                    Reason for Visit: {appts[i].reason_for_visit}
                 </li>
                 <Button type="submit" value={appts[i].id} onClick={this.props.deleteAppt}>
                     Delete    
