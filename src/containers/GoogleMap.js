@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Map, Marker, InfoWindow, GoogleApiWrapper} from 'google-maps-react';
 import {Redirect} from 'react-router-dom'
 
-const apiKey= 'AIzaSyBp4sd7Eh41b6SsZhJTSst_twS7zhYgtsI'
+const apiKey= 'AIzaSyBp4sd7Eh41b6SsZhJTSst_twS7zh'
 
 export class MapContainer extends Component {
     constructor() {
