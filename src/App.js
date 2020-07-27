@@ -520,7 +520,7 @@ class App extends Component {
           <Route key="login" exact path="/login" render={() =>
             this.renderLogin()
           }/>
-          <Route exact path='/' render={() => {
+          <Route path='/' render={() => {
             return <Welcome user={this.state.user} userLogin={this.userLogin}/>
           }}/>
         </Switch>
