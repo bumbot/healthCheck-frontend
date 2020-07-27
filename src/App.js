@@ -170,7 +170,7 @@ class App extends Component {
       this.addClinic(clinics)
     })
 
-    fetch('http://localhost:3000/clinics')
+    fetch('https://healthcheck-backendpage.herokuapp.com/clinics')
     .then(resp=>resp.json())
     .then(array=>{
       array.forEach(clinic => {
@@ -182,7 +182,7 @@ class App extends Component {
   }
 
   addClinic = (obj) => {
-    fetch('http://localhost:3000/clinics', {
+    fetch('https://healthcheck-backendpage.herokuapp.com/clinics', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -326,7 +326,7 @@ class App extends Component {
       password: pw
     }
 
-    fetch('http://localhost:3000/login', {
+    fetch('https://healthcheck-backendpage.herokuapp.com/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -382,7 +382,7 @@ class App extends Component {
       password: pw
     }
 
-    fetch('http://localhost:3000/users', {
+    fetch('https://healthcheck-backendpage.herokuapp.com/users', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -422,7 +422,7 @@ class App extends Component {
   deleteAppt = (event) => {
     let apptId = parseInt(event.target.value)
     let appt = this.state.appointments.find(appt => appt.id === apptId)
-    fetch(`http://localhost:3000/appointments/${apptId}`, {
+    fetch(`https://healthcheck-backendpage.herokuapp.com/appointments/${apptId}`, {
       method: "DELETE",
       headers: {
         'Accept': 'application/json',
@@ -461,7 +461,7 @@ class App extends Component {
       reason_for_visit: reason
     }
     
-    fetch('http://localhost:3000/appointments', {
+    fetch('https://healthcheck-backendpage.herokuapp.com/appointments', {
       method: "POST",
       headers: {
         'Accept': 'application/json',
