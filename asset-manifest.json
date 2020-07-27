@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/healthCheck-frontend/static/css/main.9ad3ebb6.chunk.css",
+    "main.js": "/healthCheck-frontend/static/js/main.0bb6102e.chunk.js",
+    "main.js.map": "/healthCheck-frontend/static/js/main.0bb6102e.chunk.js.map",
+    "runtime-main.js": "/healthCheck-frontend/static/js/runtime-main.b2e82ce2.js",
+    "runtime-main.js.map": "/healthCheck-frontend/static/js/runtime-main.b2e82ce2.js.map",
+    "static/css/2.69121389.chunk.css": "/healthCheck-frontend/static/css/2.69121389.chunk.css",
+    "static/js/2.4320f67e.chunk.js": "/healthCheck-frontend/static/js/2.4320f67e.chunk.js",
+    "static/js/2.4320f67e.chunk.js.map": "/healthCheck-frontend/static/js/2.4320f67e.chunk.js.map",
+    "index.html": "/healthCheck-frontend/index.html",
+    "precache-manifest.1a4f3c017e0f7b0021e56bb6d89f785a.js": "/healthCheck-frontend/precache-manifest.1a4f3c017e0f7b0021e56bb6d89f785a.js",
+    "service-worker.js": "/healthCheck-frontend/service-worker.js",
+    "static/css/2.69121389.chunk.css.map": "/healthCheck-frontend/static/css/2.69121389.chunk.css.map",
+    "static/css/main.9ad3ebb6.chunk.css.map": "/healthCheck-frontend/static/css/main.9ad3ebb6.chunk.css.map",
+    "static/js/2.4320f67e.chunk.js.LICENSE.txt": "/healthCheck-frontend/static/js/2.4320f67e.chunk.js.LICENSE.txt",
+    "static/media/App.css": "/healthCheck-frontend/static/media/welcome-splash.5e5d703a.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b2e82ce2.js",
+    "static/css/2.69121389.chunk.css",
+    "static/js/2.4320f67e.chunk.js",
+    "static/css/main.9ad3ebb6.chunk.css",
+    "static/js/main.0bb6102e.chunk.js"
+  ]
+}
